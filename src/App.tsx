@@ -18,7 +18,11 @@ function App() {
 
   return (
     <div className="max-w-[1200px] mx-auto mt-12">
-      <Form />
+      <Form
+        onSubmit={(expense) =>
+          setExpenses([...expenses, { ...expense, id: expenses.length + 1 }])
+        }
+      />
       <div className="my-6">
         <ExpenseFilter
           onSelectedCategory={(category) => setSelectedCategory(category)}

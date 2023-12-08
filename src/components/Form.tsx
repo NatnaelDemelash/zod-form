@@ -5,21 +5,30 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 const schema = z.object({
   description: z.string().min(3).max(80),
-  amount: z.number().min(1).max(100_000),
+  amount: z.number().min(0.01).max(100_000),
   category: z.enum(categories),
 });
 
 type ExpenseFormData = z.infer<typeof schema>;
 
-function Form() {
+interface Props {
+  onSubmit: (data: ExpenseFormData) => void;
+}
+
+function Form({ onSubmit }: Props) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ExpenseFormData>({ resolver: zodResolver(schema) });
 
   return (
-    <form onSubmit={handleSubmit(() => console.log("form submission"))}>
+    <form
+      onSubmit={handleSubmit((data) => {
+        onSubmit(data), reset();
+      })}
+    >
       <div className="mb-3 w-[40%]">
         <label htmlFor="name">Description</label>
         <input
@@ -38,7 +47,7 @@ function Form() {
       <div className="mb-3 w-[40%]">
         <label htmlFor="amount">Amount</label>
         <input
-          {...register("amount")}
+          {...register("amount", { valueAsNumber: true })}
           id="amount"
           type="number"
           placeholder="Enter age"
@@ -57,7 +66,7 @@ function Form() {
           id="category"
           className="block border-2 border-[#343434b7] rounded-md  py-2 px-4 mt-2 w-full"
         >
-          <option value=""></option>
+          <option value="">Select category for expense</option>
           {categories.map((category) => (
             <option key={category} value={category}>
               {category}
