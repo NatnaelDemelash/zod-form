@@ -2,7 +2,7 @@ interface Expense {
   id: number;
   description: string;
   amount: number;
-  categories: string;
+  category: string;
 }
 
 interface Props {
@@ -28,7 +28,7 @@ function ExpenseList({ expenses, onDelete }: Props) {
           <tr key={expense.id} className="bg-white border-b">
             <td>{expense.description}</td>
             <td>{expense.amount}</td>
-            <td>{expense.categories}</td>
+            <td>{expense.category}</td>
             <td>
               <button
                 className="py-2 px-5 bg-red-300 text-white rounded-full"
